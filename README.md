@@ -7,10 +7,9 @@ This repository is for developing the flow of Collage Panorama .
 * [Algorithm](#algorithm  )
 * [How To Run This Project](#how-to-run-this-project)
 ### Teams
-[team] ![](docs/team.png)
+![](docs/team.png)
 ### Algorithm
-
-[work folows] ![](docs/Diagram.png)
+![](docs/Diagram.png)
 #### algorithm steps
 ```
 Input: n unordered images
@@ -26,5 +25,8 @@ Input: n unordered images
         (ii) Render panorama using multi-band blending
 Output: Panoramic image(s)
 ```
+
+#### result
+* ![](docs/final.jpg)
 
 
