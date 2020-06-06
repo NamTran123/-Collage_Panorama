@@ -34,3 +34,27 @@ def get_sift_point(image):
 
     return key_point,descs , img
 
+
+def BFmatch(desc1, desc2, kp_1,kp_2):
+    FLANN_INDEX_KDTREE = 0
+    index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+    search_params = dict(checks=50)
+
+    flann = cv2.FlannBasedMatcher(index_params,search_params)
+    matches = flann.knnMatch(np.asarray(desc1,np.float32),np.asarray(desc2,np.float32),k=2)
+    print("matches:",matches)
+    #store  all  good match  as  per  lowe 's ratio test
+    good_matches  =  []
+    for  m,n  in  matches:
+        if  m.distance < 0.7* n.distance:
+            good_matches.append(m)
+    print('good matches:',good_matches)
+    src_pts = np.float32([ kp_1[m.queryIdx].pt for m in good_matches ]).reshape(-1,1,2)             #Gives us the index of the descriptor in the list of train descriptors 
+    dst_pts = np.float32([ kp_2[m.trainIdx].pt for m in good_matches ]).reshape(-1,1,2)               #Gives us the index of the descriptor in the list of query descriptors 
+    print("dst:",dst_pts)
+    print("dst:",src_pts)
+    #homography relates the transformation between two plane by using RANSAC Algorithm
+    H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
+    matchesMask = mask.ravel().tolist()
+    return good_matches, matchesMask,H
+
